@@ -9,6 +9,7 @@
     <div class="col-md-10 col-md-offset-1">
         <div class="well">
             <input type="button" id="btnLoadEmployees" class="btn btn-success" value="Load Employees" />
+            <span id="lblUser" class="text-muted"></span>
             <input type="button" id="btnLogoff" class="btn btn-success pull-right" value="Log Off" />
         </div>
         <div class="well hidden" id="divData">
@@ -56,12 +57,13 @@
     <script src="Scripts/bootstrap.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            if (sessionStorage.getItem('accessToken') == null) window.location.href = 'Login.html';
+            if (localStorage.getItem('accessToken') == null) window.location.href = 'Login.html';
+            if (localStorage.getItem('accessToken') != null) $('#lblUser').text('Hello ' + localStorage.getItem('username'));
             $('#errorModal').on('hidden.bs.modal', function () {
                 window.location.href = 'Login.html';
             });
             $('#btnLogoff').click(function () {
-                sessionStorage.removeItem('accessToken');
+                localStorage.removeItem('accessToken');
                 
                 window.location.href = 'Login.html';
             });
@@ -73,7 +75,7 @@
                     url: '/api/Employees',
                     method: 'GET',
                     headers:{
-                        Authorization: 'Bearer ' + sessionStorage.getItem('accessToken')
+                        Authorization: 'Bearer ' + localStorage.getItem('accessToken')
                     },
                     success: function (data) {
                         $('#tblBody').empty();
