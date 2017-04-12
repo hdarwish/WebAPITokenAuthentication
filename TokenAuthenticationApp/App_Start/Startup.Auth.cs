@@ -10,6 +10,8 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using TokenAuthenticationApp.Providers;
 using TokenAuthenticationApp.Models;
+using Microsoft.Owin.Security.Facebook;
+using TokenAuthenticationApp.facebook;
 
 namespace TokenAuthenticationApp
 {
@@ -59,11 +61,22 @@ namespace TokenAuthenticationApp
             //    appId: "",
             //    appSecret: "");
 
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            var FacebookOptions = new FacebookAuthenticationOptions()
             {
-                ClientId = "255819634610-ckon3ngvde8cg3u83j6lahiqe1lonpnm.apps.googleusercontent.com",
-                ClientSecret = "pOO9KGQHVKpdYzHafQGapq2H"
-            });
+                AppId= "241362119603267",
+                AppSecret= "29c6a8c30683b2eb7fd995e63466cee1",
+                BackchannelHttpHandler = new FacebookBackChannelHandler(),
+                UserInformationEndpoint = "https://graph.facebook.com/v2.4/me?fields=id,email"
+            };
+        FacebookOptions.Scope.Add("email");
+            app.UseFacebookAuthentication(FacebookOptions);
+        app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+        {
+            ClientId = "255819634610-ckon3ngvde8cg3u83j6lahiqe1lonpnm.apps.googleusercontent.com",
+                    ClientSecret = "pOO9KGQHVKpdYzHafQGapq2H"
+                });
         }
+        
     }
-}
+ }
+
